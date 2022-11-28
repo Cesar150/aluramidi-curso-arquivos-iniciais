@@ -1,22 +1,33 @@
-function tocaSom(idElementoAudio) {  //2 - Criar uma função que referencia cada tag audio com a função play.
-    document.querySelector(idElementoAudio).play();
+function tocaSom(seletorAudio) {
+    const elemento = document.querySelector(seletorAudio);
+
+    if (elemento && elemento.localName === 'audio') {
+        elemento.play();
+    } else {
+        console.log('Elemento não encontrado')
+    }
 }
 
-const listaDeTeclas = document.querySelectorAll('.tecla'); //1 - capturar todos os botões
+const listaDeTeclas = document.querySelectorAll('.tecla');
 
+for (let contador = 0; contador < listaDeTeclas.length; contador++) {
 
-let contador = 0;
+    const tecla = listaDeTeclas[contador];
+    const instrumento = tecla.classList[1];
+    const idAudio = `#som_${instrumento}`
 
-while (contador < listaDeTeclas.length) { //3- criar um loop
-
-    const tecla = listaDeTeclas[contador]; //4- referenciar em uma constante cada item da lista 
-    const instrumento = tecla.classList[1]; //5-referenciar em uma constante cada nome de classe de seu respectivo item.
-    const idAudio = `#som_${instrumento}` //6- usar template string para concatenar e referenciar em uma constante.
-
-    tecla.onclick = function () { //7- passar o método onclick para a lista, para o método passamos uma função anômima por causa do hoist não serve uma função declarativa. 
-        tocaSom(idAudio); //8- invoca função.
+    tecla.onclick = function () {
+        tocaSom(idAudio);
     };
 
-    contador = contador + 1;
+    tecla.onkeydown = function (evento) {
 
+        if (evento.code === 'Space' || evento.code === 'Enter') {
+            tecla.classList.add('ativa');
+        }
+    };
+
+    tecla.onkeyup = function () {
+        tecla.classList.remove('ativa');
+    }
 }
